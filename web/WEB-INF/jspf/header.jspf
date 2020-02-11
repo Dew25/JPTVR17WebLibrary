@@ -21,8 +21,8 @@
                   <li class="nav-item " id="menu1">
                     <a class="nav-link" href="#">Новые книги</a>
                   </li>
-                  <li class="nav-item active " id="menu2">
-                    <a class="nav-link" href="#">Features</a>
+                  <li class="nav-item " id="menu2">
+                    <a class="nav-link" href="#">Список читателей</a>
                   </li>
                   <li class="nav-item"  id="menu3">
                     <a class="nav-link" href="#">Pricing</a>

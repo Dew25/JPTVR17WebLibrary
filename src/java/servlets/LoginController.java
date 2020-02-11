@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jsonbuilders.BookJsonBuilder;
+import jsonbuilders.ReaderJsonBuilder;
 import session.BookFacade;
 import session.ReaderFacade;
 import session.RolesFacade;
@@ -46,6 +47,7 @@ import util.RoleManager;
     "/addReader",
     "/listBooks",
     "/listNewBooks",
+    "/listReadersJson",
     
 
 })
@@ -225,6 +227,22 @@ public class LoginController extends HttpServlet {
                 String json = "";
                 try (Writer writer = new StringWriter()){
                     Json.createWriter(writer).write(arrayBuilder.build());
+                    json = writer.toString();
+                }
+                try (PrintWriter out = response.getWriter()) {
+                  out.println(json);        
+                }
+                break;
+            case "/listReadersJson":
+                List<Reader> listReaders = readerFacade.findAll();
+                ReaderJsonBuilder readerJsonBuilder = new ReaderJsonBuilder();
+                JsonArrayBuilder jab = Json.createArrayBuilder();
+                for(Reader r : listReaders){
+                  jab.add(readerJsonBuilder.createJsonReader(r));
+                }
+                json = "";
+                try (Writer writer = new StringWriter()){
+                    Json.createWriter(writer).write(jab.build());
                     json = writer.toString();
                 }
                 try (PrintWriter out = response.getWriter()) {

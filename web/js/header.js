@@ -16,6 +16,16 @@ document.getElementById("menu1").onclick = function(){
 };
 document.getElementById("menu2").onclick = function(){
   toogleMenuActive("menu2");
+  fetch('listReadersJson')
+          .then(status)
+          .then(json)
+          .then(function(data) {  
+            printListReaders(data);
+            console.log('Request succeeded with JSON response', data);  
+          })
+          .catch(function(error) {  
+            console.log('Request failed', error);  
+          });
 };
 document.getElementById("menu3").onclick = function(){
   toogleMenuActive("menu3");
@@ -57,6 +67,21 @@ function printListNewBooks(data){
         <div class="card-body">
           <h4 class="card-title">${data[i].author}</h4>
           <p class="card-text">${data[i].publishedYear}</p>
+        </div>
+      </div>`;
+  }
+  document.getElementById('content').innerHTML = cards;
+}
+
+function printListReaders(data){
+  let cards = '';
+  for(let i=0;i<data.length;i++){
+    cards+=
+     `<div class="card border-primary mb-3" style="max-width: 30rem;">
+        <div class="card-header">${data[i].name} ${data[i].surname}</div>
+        <div class="card-body">
+          <h4 class="card-title">Телефон: ${data[i].phone}</h4>
+          <p class="card-text">Кошелек с деньгами: ${data[i].money}</p>
         </div>
       </div>`;
   }
