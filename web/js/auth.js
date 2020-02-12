@@ -9,7 +9,7 @@ function printLoginForm(){
      `<div class="card border-primary p-2" style="max-width: 30rem;">
         <div class="card-header text-center">Введите логин и пароль</div>
         <div class="card-body">
-          <p class="card-text d-flex justify-content-between">Логин: <input class="ml-2" type="text" id="enter"></p>
+          <p class="card-text d-flex justify-content-between">Логин: <input class="ml-2" type="text" id="login"></p>
           <p class="card-text d-flex justify-content-between">Пароль: <input class="ml-2" type="text" id="password"></p>
           <p class="card-text"><button class="btn btn-light w-100" type="button" id="btnEnter">Войти</button</p>
         </div>
@@ -21,5 +21,34 @@ function printLoginForm(){
   }
 }
 function auth(){
- 
+  let login = document.getElementById('login').value;
+  let password = document.getElementById('password').value;
+  let data = {
+    'login': login,
+    'password': password
+  }
+  fetch('loginJson',{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+          .then(status)
+          .then(json)
+          .then(function(data) { 
+            if(data.authStatus){
+              localStorage.setItem('token',data.token);
+              localStorage.setItem('user',data.user);
+              getBook();
+              document.getElementById('info').innerHTML = 'Вы вошли как '+data.user.login;
+            }else{
+              document.getElementById('info').innerHTML = 'Войти не удалось';
+              printLoginForm();
+            }
+            console.log('Request succeeded with JSON response', data);  
+          })
+          .catch(function(error) {  
+            console.log('Request failed', error);  
+          });
 }

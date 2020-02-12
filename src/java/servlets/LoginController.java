@@ -12,6 +12,7 @@ import entity.User;
 import entity.UserRoles;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jsonbuilders.BookJsonBuilder;
 import jsonbuilders.ReaderJsonBuilder;
+import jsonbuilders.UserJsonBuilder;
 import session.BookFacade;
 import session.ReaderFacade;
 import session.RolesFacade;
@@ -42,6 +47,7 @@ import util.RoleManager;
 @WebServlet(name = "LoginController",loadOnStartup = 1, urlPatterns = {
     "/showLogin",
     "/login",
+    "/loginJson",
     "/logout",
     "/newReader",
     "/addReader",
@@ -110,11 +116,12 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        String json = "";
+        JsonObjectBuilder job = Json.createObjectBuilder();
         EncriptPass ep = new EncriptPass();
         RoleManager rm = new RoleManager();
         String path = request.getServletPath();
         switch (path) {
-            
             case "/showLogin":
                 request.getRequestDispatcher("/showLogin.jsp")
                         .forward(request, response);
@@ -140,6 +147,35 @@ public class LoginController extends HttpServlet {
                 request.setAttribute("userRole", rm.getTopRoleName(user));
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
+                break;
+            case "/loginJson":
+                JsonReader jsonReader = Json.createReader(request.getReader());
+                JsonObject jsonObject = jsonReader.readObject();
+                login = jsonObject.getString("login","");
+                password = jsonObject.getString("password","");
+                user = userFacade.findByLogin(login);
+                if(user == null){
+                  job.add("authStatus", "false");
+                  try (Writer writer = new StringWriter()){
+                      Json.createWriter(writer).write(job.build());
+                      json = writer.toString();
+                      break;
+                  }
+                }
+                password = ep.setEncriptPass(password,user.getSalts());
+                if(!password.equals(user.getPassword())){
+                  job.add("authStatus", "false");
+                  try (Writer writer = new StringWriter()){
+                      Json.createWriter(writer).write(job.build());
+                      json = writer.toString();
+                      break;
+                  }
+                }
+                session = request.getSession(true);
+                UserJsonBuilder ujb = new UserJsonBuilder();
+                job.add("authStatus", "true")
+                   .add("token", session.getId())
+                   .add("user", ujb.createJsonUser(user));
                 break;
             case "/logout":
                 session = request.getSession(false);
@@ -224,7 +260,7 @@ public class LoginController extends HttpServlet {
                 for(Book book : listNewBooks){
                     arrayBuilder.add(bookJsonBuilder.createJsonBook(book));
                 }
-                String json = "";
+                json = "";
                 try (Writer writer = new StringWriter()){
                     Json.createWriter(writer).write(arrayBuilder.build());
                     json = writer.toString();
@@ -245,12 +281,15 @@ public class LoginController extends HttpServlet {
                     Json.createWriter(writer).write(jab.build());
                     json = writer.toString();
                 }
-                try (PrintWriter out = response.getWriter()) {
-                  out.println(json);        
-                }
+                
                 break;
         }
-
+        if(!"".equals(json)){
+          try (PrintWriter out = response.getWriter()) {
+            out.println(json);        
+          }
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
