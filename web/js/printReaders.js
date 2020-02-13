@@ -1,14 +1,12 @@
 
-import {json, status} from './http.js';
+import {http} from './http.js';
 export {getReaders};
 
 function getReaders(){
-  fetch('listReadersJson')
-          .then(status)
-          .then(json)
-          .then(function(data) {  
-            printListReaders(data);
-            console.log('Request succeeded with JSON response', data);  
+  http({url:'listReadersJson'})
+          .then(function(response) {  
+            printListReaders(response);
+            console.log('Request succeeded with JSON response', response);  
           })
           .catch(function(error) {  
             console.log('Request failed', error);  

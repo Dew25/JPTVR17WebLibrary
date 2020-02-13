@@ -1,4 +1,4 @@
-import {json, status} from './http.js';
+import {http} from './http.js';
 import {getBooks } from './printBooks.js';
 
 export {printLoginForm,systemOutput};
@@ -23,20 +23,13 @@ function printLoginForm(){
 function auth(){
   let login = document.getElementById('login').value;
   let password = document.getElementById('password').value;
-  let data = {
+  let datas = {
     'login': login,
     'password': password
   };
-  fetch('loginJson',{
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        })
-          .then(status)
-          .then(json)
-          .then(function(response) { 
+  http({  url:'loginJson', 
+          fetchOpt:{method:'POST',data:datas}
+        }).then(function(response) { 
             if(response.authStatus){
               localStorage.setItem('token',response.token);
               localStorage.setItem('user',response.user);
@@ -52,16 +45,12 @@ function auth(){
             }
             console.log('Request succeeded with JSON response', response);  
           })
-          .catch(function(error) {  
-            console.log('Request failed', error);  
-          });
-};
+}
+
 function systemOutput(){
-    fetch('logoutJson')
-          .then(status)
-          .then(json)
-          .then(function(response) {  
-            if(response.authStatus){
+    http('logoutJson')
+          .then(function(response) { 
+            if('false'===response.authStatus){
               if(localStorage.getItem('token')!== null){
                 localStorage.removeItem('token');
               }
@@ -72,9 +61,7 @@ function systemOutput(){
               document.getElementById('sysout').style.display = 'none';
               document.getElementById('info').innerHTML = 'Вы вышли';
             }
-            console.log('Request succeeded with JSON response', data);  
+            console.log('Request succeeded with JSON response', response);  
           })
-          .catch(function(error) {  
-            console.log('Request failed', error);  
-          });
+          
 }
