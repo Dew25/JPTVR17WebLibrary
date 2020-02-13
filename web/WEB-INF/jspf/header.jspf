@@ -18,16 +18,16 @@
 
               <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                  <li class="nav-item " id="menu1">
+                  <li class="nav-item " id="newBook">
                     <a class="nav-link" href="#">Новые книги</a>
                   </li>
-                  <li class="nav-item " id="menu2">
+                  <li class="nav-item " id="listBooks">
                     <a class="nav-link" href="#">Список читателей</a>
                   </li>
-                  <li class="nav-item"  id="menu3">
+                  <li class="nav-item"  id="showLogin">
                     <a class="nav-link" href="#">Вход</a>
                   </li>
-                  <li class="nav-item"  id="menu4">
+                  <li class="nav-item"  id="sysout" style="display: none;">
                     <a class="nav-link" href="#">Выход</a>
                   </li>
                 </ul>

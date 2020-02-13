@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
         <h1>Сетевая библиотека</h1>
-        <p>${info}</p>
+        <p id="info">${info}</p>
         <br>
         Для всех:<br>
         <c:if test="${userRole eq null}">

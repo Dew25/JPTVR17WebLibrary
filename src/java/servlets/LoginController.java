@@ -49,6 +49,7 @@ import util.RoleManager;
     "/login",
     "/loginJson",
     "/logout",
+    "/logoutJson",
     "/newReader",
     "/addReader",
     "/listBooks",
@@ -176,6 +177,10 @@ public class LoginController extends HttpServlet {
                 job.add("authStatus", "true")
                    .add("token", session.getId())
                    .add("user", ujb.createJsonUser(user));
+                try (Writer writer = new StringWriter()){
+                    Json.createWriter(writer).write(job.build());
+                    json = writer.toString();
+                }
                 break;
             case "/logout":
                 session = request.getSession(false);
@@ -184,6 +189,17 @@ public class LoginController extends HttpServlet {
                 }
                 request.setAttribute("info", "Вы вышли из системы");
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
+                break;
+            case "/logoutJson":
+                session = request.getSession(false);
+                if(null != session){
+                    session.invalidate();
+                }
+                job.add("authStatus", "false");
+                try (Writer writer = new StringWriter()){
+                    Json.createWriter(writer).write(job.build());
+                    json = writer.toString();
+                }
                 break;
             case "/newReader":
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);

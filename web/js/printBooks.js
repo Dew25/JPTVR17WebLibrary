@@ -3,6 +3,15 @@ export {getBooks};
 
 function getBooks(){
   fetch('listNewBooks')
+          .then(status)
+          .then(json)
+          .then(function(data) {  
+            printListNewBooks(data);
+            console.log('Request succeeded with JSON response', data);  
+          })
+          .catch(function(error) {  
+            console.log('Request failed', error);  
+          });
            
 }
 function printListNewBooks(data){
@@ -19,6 +28,7 @@ function printListNewBooks(data){
   }
   cards +='</div>';
   document.getElementById('content').innerHTML = cards;
+  
 }
 
 

@@ -1,22 +1,23 @@
 import {json, status} from './http.js'; //импортируем функции из скрипта
 import {getBooks } from './printBooks.js';
 import {getReaders } from './printReaders.js';
-import {printLoginForm} from './auth.js';
+import {printLoginForm,systemOutput} from './auth.js';
 
-document.getElementById("menu1").onclick = function(){
-  toogleMenuActive("menu1"); //находится в текущем скрипте
+document.getElementById("newBook").onclick = function(){
+  toogleMenuActive("newBook"); //находится в текущем скрипте
   getBooks(); // импортирована из скрипта (модуля) printBooks.js
 };
-document.getElementById("menu2").onclick = function(){
-  toogleMenuActive("menu2");//находится в текущем скрипте
+document.getElementById("listBooks").onclick = function(){
+  toogleMenuActive("listBooks");//находится в текущем скрипте
   getReaders();// импортирована из скрипта (модуля) printReaders.js
 };
-document.getElementById("menu3").onclick = function(){
-  toogleMenuActive("menu3");
+document.getElementById("showLogin").onclick = function(){
+  toogleMenuActive("showLogin");
   printLoginForm();
 };
-document.getElementById("menu4").onclick = function(){
-  toogleMenuActive("menu4");
+document.getElementById("sysout").onclick = function(){
+  toogleMenuActive("sysout");
+  systemOutput();
 };
 
 function toogleMenuActive(elementId){
@@ -32,6 +33,7 @@ function toogleMenuActive(elementId){
     }
   }
 }
+
 
 
 
