@@ -1,11 +1,17 @@
 
 import {http} from './http.js';
+import {getBooks} from './printBooks.js';
 export {getReaders};
 
 function getReaders(){
-  http({url:'listReadersJson'})
+  http({url:'listReadersJson',options:{method:'GET'}})
           .then(function(response) {  
-            printListReaders(response);
+            if(response.authStatus === "true"){
+              printListReaders(response.dataJson);
+            }else{
+              getBooks();
+              document.getElementById("info").innerHTML="У вас нет прав. Войдите!"
+            }
             console.log('Request succeeded with JSON response', response);  
           })
           .catch(function(error) {  

@@ -1,8 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-        <h1>Сетевая библиотека</h1>
-        <p id="info">${info}</p>
+        
+        <p id="info" class="w-100 text-center">${info}</p>
         <br>
-        Для всех:<br>
+        <!--Для всех:<br>
         <c:if test="${userRole eq null}">
             <a href="showLogin">Войти</a><br>
         </c:if>
@@ -27,6 +27,7 @@
         <c:if test="${userRole eq 'ADMIN'}">
             <a href="showAdmin">Изменить роль пользователя</a><br>
         </c:if>
+        -->
             <div id="content"  >
                
            </div> 

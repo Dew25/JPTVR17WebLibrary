@@ -23,20 +23,20 @@ function printLoginForm(){
 function auth(){
   let login = document.getElementById('login').value;
   let password = document.getElementById('password').value;
-  let datas = {
+  let credentials = {
     'login': login,
     'password': password
   };
-  http({  url:'loginJson', 
-          fetchOpt:{method:'POST',data:datas}
+  http({url:'loginJson', 
+          options:{method:'POST',data:credentials}
         }).then(function(response) { 
-            if(response.authStatus){
+            if(response.authStatus === 'true'){
               localStorage.setItem('token',response.token);
               localStorage.setItem('user',response.user);
-              getBooks();
               document.getElementById('info').innerHTML = 'Вы вошли как '+response.user.login;
               document.getElementById('showLogin').style.display = 'none';
               document.getElementById('sysout').style.display = 'block';
+              getBooks();
             }else{
               document.getElementById('info').innerHTML = 'Войти не удалось';
               printLoginForm();
@@ -48,7 +48,9 @@ function auth(){
 }
 
 function systemOutput(){
-    http('logoutJson')
+    http({url:'logoutJson',
+          options:{method:'GET'}
+        })
           .then(function(response) { 
             if('false'===response.authStatus){
               if(localStorage.getItem('token')!== null){

@@ -24,12 +24,12 @@ function status(response) {
 function json(response) {  
   return response.json()  
 }
-let opt={
-  method: 'GET',
-  data: null
-};
+//let opt={
+//  method: 'GET',
+//  data: null
+//};
 function fetchOpts(opt){
-  if(opt.data !== null){
+  if(opt.method === 'POST'){
     return {
             method: opt.method,
             headers: {
@@ -48,20 +48,21 @@ function fetchOpts(opt){
           };
   }
 };
-let httpOptions={
-  url: '',
-  fetchOpt: {
-    method: 'GET',
-    data: null
-  },
-  params: null
-};
+//let httpOptions={
+//  url: '',
+//  fetchOpt: {
+//    method: 'GET',
+//    data: null
+//  },
+//  params: null
+//};
 
 function http(httpOptions){
   if (httpOptions.params != null){
     httpOptions.url= httpOptions.url+'?'+queryParams(httpOptions.params);
   }
-  return fetch(httpOptions.url, fetchOpts(httpOptions.opt))
+  let options = fetchOpts(httpOptions.options);
+  return fetch(httpOptions.url, options)
             .then(status)
             .then(json)
             .catch((ex) => console.log("Fetch Exception", ex));

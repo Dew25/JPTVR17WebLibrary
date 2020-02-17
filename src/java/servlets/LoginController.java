@@ -37,6 +37,7 @@ import session.RolesFacade;
 import session.UserFacade;
 import session.UserRolesFacade;
 import util.EncriptPass;
+import util.JsonResponse;
 import util.RoleManager;
 
 /**
@@ -116,8 +117,10 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        HttpSession session  = request.getSession();
         String json = "";
         JsonObjectBuilder job = Json.createObjectBuilder();
+        JsonResponse jsonResponse = new JsonResponse();
         EncriptPass ep = new EncriptPass();
         RoleManager rm = new RoleManager();
         String path = request.getServletPath();
@@ -141,7 +144,7 @@ public class LoginController extends HttpServlet {
                     request.getRequestDispatcher("/showLogin.jsp")
                         .forward(request, response);
                 }
-                HttpSession session = request.getSession(true);
+                session = request.getSession(true);
                 session.setAttribute("user", user);
                 request.setAttribute("info", "Вы вошли в систему как "+login);
                 request.setAttribute("userRole", rm.getTopRoleName(user));
@@ -155,31 +158,17 @@ public class LoginController extends HttpServlet {
                 password = jsonObject.getString("password","");
                 user = userFacade.findByLogin(login);
                 if(user == null){
-                  job.add("authStatus", "false");
-                  try (Writer writer = new StringWriter()){
-                      Json.createWriter(writer).write(job.build());
-                      json = writer.toString();
-                      break;
-                  }
+                  json = jsonResponse.getJsonResponse(session);
+                  break;
                 }
                 password = ep.setEncriptPass(password,user.getSalts());
                 if(!password.equals(user.getPassword())){
-                  job.add("authStatus", "false");
-                  try (Writer writer = new StringWriter()){
-                      Json.createWriter(writer).write(job.build());
-                      json = writer.toString();
-                      break;
-                  }
+                  json = jsonResponse.getJsonResponse(session);
+                  break;
                 }
                 session = request.getSession(true);
-                UserJsonBuilder ujb = new UserJsonBuilder();
-                job.add("authStatus", "true")
-                   .add("token", session.getId())
-                   .add("user", ujb.createJsonUser(user));
-                try (Writer writer = new StringWriter()){
-                    Json.createWriter(writer).write(job.build());
-                    json = writer.toString();
-                }
+                session.setAttribute("user", user);
+                json = jsonResponse.getJsonResponse(session);
                 break;
             case "/logout":
                 session = request.getSession(false);
@@ -194,11 +183,7 @@ public class LoginController extends HttpServlet {
                 if(null != session){
                     session.invalidate();
                 }
-                job.add("authStatus", "false");
-                try (Writer writer = new StringWriter()){
-                    Json.createWriter(writer).write(job.build());
-                    json = writer.toString();
-                }
+                json = jsonResponse.getJsonResponse(session);
                 break;
             case "/newReader":
                 request.getRequestDispatcher("/newReader.jsp").forward(request, response);
@@ -271,32 +256,20 @@ public class LoginController extends HttpServlet {
             case "/listNewBooks":
                 List<Book> listNewBooks = bookFacade.getListNewBooks();
                 BookJsonBuilder bookJsonBuilder = new BookJsonBuilder();
-                JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                JsonArrayBuilder jab = Json.createArrayBuilder();
                 for(Book book : listNewBooks){
-                    arrayBuilder.add(bookJsonBuilder.createJsonBook(book));
+                    jab.add(bookJsonBuilder.createJsonBook(book));
                 }
-                json = "";
-                try (Writer writer = new StringWriter()){
-                    Json.createWriter(writer).write(arrayBuilder.build());
-                    json = writer.toString();
-                }
-                try (PrintWriter out = response.getWriter()) {
-                  out.println(json);        
-                }
+                json = jsonResponse.getJsonResponse(session,jab.build(),false);
                 break;
             case "/listReadersJson":
                 List<Reader> listReaders = readerFacade.findAll();
                 ReaderJsonBuilder readerJsonBuilder = new ReaderJsonBuilder();
-                JsonArrayBuilder jab = Json.createArrayBuilder();
+                jab = Json.createArrayBuilder();
                 for(Reader r : listReaders){
                   jab.add(readerJsonBuilder.createJsonReader(r));
                 }
-                json = "";
-                try (Writer writer = new StringWriter()){
-                    Json.createWriter(writer).write(jab.build());
-                    json = writer.toString();
-                }
-                
+                json = jsonResponse.getJsonResponse(session,jab.build());
                 break;
         }
         if(!"".equals(json)){
