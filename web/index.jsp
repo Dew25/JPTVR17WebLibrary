@@ -28,6 +28,6 @@
             <a href="showAdmin">Изменить роль пользователя</a><br>
         </c:if>
         -->
-            <div id="content"  >
-               
-           </div> 
+            <div id="content"></div>
+        
+        

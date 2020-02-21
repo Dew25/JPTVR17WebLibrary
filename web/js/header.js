@@ -1,23 +1,24 @@
-import {json, status} from './http.js'; //импортируем функции из скрипта
-import {getBooks } from './printBooks.js';
-import {getReaders } from './printReaders.js';
-import {printLoginForm,systemOutput} from './auth.js';
+
+//import {getBooks } from './printBooks.js';
+import {readerModule} from './ReaderModule.js';
+import {bookModule} from './BookModule.js';
+import {authModule} from './AuthModule.js';
 
 document.getElementById("newBook").onclick = function(){
   toogleMenuActive("newBook"); //находится в текущем скрипте
-  getBooks(); // импортирована из скрипта (модуля) printBooks.js
+  bookModule.listBooks(); // импортирована из скрипта (модуля) book.js
 };
 document.getElementById("listBooks").onclick = function(){
   toogleMenuActive("listBooks");//находится в текущем скрипте
-  getReaders();// импортирована из скрипта (модуля) printReaders.js
+  readerModule.listReaders();// импортирована из скрипта (модуля) reader.js
 };
 document.getElementById("showLogin").onclick = function(){
   toogleMenuActive("showLogin");
-  printLoginForm();
+  authModule.printLoginForm();
 };
 document.getElementById("sysout").onclick = function(){
   toogleMenuActive("sysout");
-  systemOutput();
+  authModule.systemOutput();
 };
 
 function toogleMenuActive(elementId){
