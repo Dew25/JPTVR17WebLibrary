@@ -4,12 +4,16 @@ import {readerModule} from './ReaderModule.js';
 import {bookModule} from './BookModule.js';
 import {authModule} from './AuthModule.js';
 
-document.getElementById("newBook").onclick = function(){
-  toogleMenuActive("newBook"); //находится в текущем скрипте
+document.getElementById("newBooks").onclick = function(){
+  toogleMenuActive("newBooks"); //находится в текущем скрипте
   bookModule.listBooks(); // импортирована из скрипта (модуля) book.js
 };
-document.getElementById("listBooks").onclick = function(){
-  toogleMenuActive("listBooks");//находится в текущем скрипте
+document.getElementById("newBook").onclick = function(){
+  toogleMenuActive("newBook"); //находится в текущем скрипте
+  bookModule.printNewBookForm(); // импортирована из скрипта (модуля) book.js
+};
+document.getElementById("listReaders").onclick = function(){
+  toogleMenuActive("listReaders");//находится в текущем скрипте
   readerModule.listReaders();// импортирована из скрипта (модуля) reader.js
 };
 document.getElementById("showLogin").onclick = function(){
@@ -36,7 +40,23 @@ function toogleMenuActive(elementId){
 }
 
 
+function validationFunc(){
+//  window.addEventListener('click', function () {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation')
 
+    // Loop over them and prevent submission
+    Array.prototype.filter.call(forms, function (form) {
+      form.addEventListener('submit', function (event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    });
+//  }, false);
+}
 
 
 

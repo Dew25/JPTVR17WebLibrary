@@ -47,13 +47,18 @@ class AuthModule{
                 document.getElementById('info').innerHTML = 'Вы вошли как '+response.user.login;
                 document.getElementById('showLogin').style.display = 'none';
                 document.getElementById('sysout').style.display = 'block';
-                bookModule.listBooks();
+                document.getElementById('listReaders').style.display = 'block';
+                document.getElementById('newBook').style.display = 'block';
+                
               }else{
                 document.getElementById('info').innerHTML = 'Войти не удалось';
                 this.printLoginForm();
                 document.getElementById('showLogin').style.display = 'block';
                 document.getElementById('sysout').style.display = 'none';
+                document.getElementById('listReaders').style.display = 'none';
+                //document.getElementById('newBook').style.display = 'none';
               }
+              bookModule.listBooks();
               console.log('Request succeeded with JSON response', response);  
             })
     }  
@@ -73,7 +78,9 @@ class AuthModule{
                 }
                 document.getElementById('showLogin').style.display = 'block';
                 document.getElementById('sysout').style.display = 'none';
+                document.getElementById('listReaders').style.display = 'none';
                 document.getElementById('info').innerHTML = 'Вы вышли';
+                bookModule.listBooks();
               }
               console.log('Request succeeded with JSON response', response);  
             })
