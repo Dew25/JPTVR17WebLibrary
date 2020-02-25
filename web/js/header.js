@@ -6,11 +6,15 @@ import {authModule} from './AuthModule.js';
 
 document.getElementById("newBook").onclick = function(){
   toogleMenuActive("newBook"); //находится в текущем скрипте
-  bookModule.listBooks(); // импортирована из скрипта (модуля) book.js
+  bookModule.listBooks(); // импортирована из скрипта (модуля) bookModule.js
+};
+document.getElementById("addNewBook").onclick = function(){
+  toogleMenuActive("addNewBook"); 
+  bookModule.printNewBookForm(); 
 };
 document.getElementById("listBooks").onclick = function(){
-  toogleMenuActive("listBooks");//находится в текущем скрипте
-  readerModule.listReaders();// импортирована из скрипта (модуля) reader.js
+  toogleMenuActive("listBooks");
+  readerModule.listReaders();
 };
 document.getElementById("showLogin").onclick = function(){
   toogleMenuActive("showLogin");

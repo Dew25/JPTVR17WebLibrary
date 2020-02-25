@@ -6,9 +6,9 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    <jsp-config>
+<!--    <jsp-config>
         <jsp-property-group>
             <display-name>template1</display-name>
             <url-pattern>/index.jsp</url-pattern>
@@ -16,5 +16,5 @@
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
-    </jsp-config>
+    </jsp-config>-->
 </web-app>
