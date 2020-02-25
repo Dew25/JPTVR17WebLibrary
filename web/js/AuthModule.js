@@ -6,7 +6,7 @@ import {bookModule } from './BookModule.js';
 
 class AuthModule{
 //код внедрения в страничку
-  cards = function(){
+  cards(){
     return  `<div class="w-100 d-flex justify-content-center">
                <div class="card border-primary p-2" style="max-width: 30rem;">
                   <div class="card-header text-center">Введите логин и пароль</div>
@@ -19,7 +19,7 @@ class AuthModule{
              </div>`;
   }
 
-  printLoginForm=function(){
+  printLoginForm(){
     document.getElementById('content').innerHTML = `<div class="w-100 d-flex justify-content-center">
                <div class="card border-primary p-2" style="max-width: 30rem;">
                   <div class="card-header text-center">Введите логин и пароль</div>
@@ -64,7 +64,7 @@ class AuthModule{
     }  
   }
 
-  systemOutput=function(){
+  systemOutput(){
       httpModule.http({url:'logoutJson',
             options:{method:'GET'}
           })

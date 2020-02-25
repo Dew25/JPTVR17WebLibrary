@@ -3,7 +3,7 @@ import {httpModule} from './HttpModule.js';
 import {bookModule} from './BookModule.js';
 
 class ReaderModule{
-  listReaders=function(){
+  listReaders(){
     httpModule.http({url:'listReadersJson',options:{method:'GET'}})
       .then(function(response) {  
         if(response.authStatus === "true"){
@@ -32,7 +32,7 @@ class ReaderModule{
       });
   }
 
-  printListReaders=function(data){
+  printListReaders(data){
     let cards = '<div class="w-100 d-flex justify-content-center">';
     for(let i=0;i<data.length;i++){
       cards +=  

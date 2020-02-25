@@ -1,7 +1,7 @@
 import {httpModule} from './HttpModule.js';
 
 class Book{
-  card=function(data){ 
+  card(data){ 
       return `<div class="card border-primary m-3" style="max-width: 10rem;">
           <div class="card-header">${data[i].name}</div>
           <div class="card-body">
@@ -11,7 +11,7 @@ class Book{
         </div>`;
   }
   
-  listBooks=function(){
+  listBooks(){
     httpModule.http({url:'listNewBooks',options:{method:'GET'}})
             .then(function(response) {  
               //printListNewBooks(response.dataJson);
@@ -33,10 +33,9 @@ class Book{
               console.log('Request succeeded with JSON response', response);  
             })
   }
-  createBook=()=>{console.log("createBook=true");
-  }
+  createBook(){console.log("createBook=true");}
   
-  printNewBookForm=function(validFunc){
+  printNewBookForm(validFunc){
     let htmlAddBook = `<div class="row d-flex justify-content-center">
                         <div class="col-md-8 order-md-1">
                           <h4 class="mb-3">Добавить книгу</h4>

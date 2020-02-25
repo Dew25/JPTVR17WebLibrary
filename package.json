@@ -1,0 +1,30 @@
+{
+  "name": "jptvr17weblibrary",
+  "version": "1.0.0",
+  "description": "JPTVR17WebLibrary",
+  "main": "web/js/header.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dew25/JPTVR17WebLibrary.git"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "webpack"
+  ],
+  "author": "JVM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dew25/JPTVR17WebLibrary/issues"
+  },
+  "homepage": "https://github.com/Dew25/JPTVR17WebLibrary#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  }
+}

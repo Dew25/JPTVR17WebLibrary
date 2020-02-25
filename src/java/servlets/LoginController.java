@@ -55,6 +55,8 @@ import util.RoleManager;
     "/listBooks",
     "/listNewBooks",
     "/listReadersJson",
+    "/dist/*",
+    
     
 
 })
@@ -124,7 +126,14 @@ public class LoginController extends HttpServlet {
         EncriptPass ep = new EncriptPass();
         RoleManager rm = new RoleManager();
         String path = request.getServletPath();
+        if("/dist".equals(path)){
+          path = request.getPathInfo();
+          if("/index.html".equals(path)){
+            path="/listNewBooks";
+          }
+        }
         switch (path) {
+            
             case "/showLogin":
                 request.getRequestDispatcher("/showLogin.jsp")
                         .forward(request, response);
@@ -273,6 +282,7 @@ public class LoginController extends HttpServlet {
                 break;
         }
         if(!"".equals(json)){
+          
           try (PrintWriter out = response.getWriter()) {
             out.println(json);        
           }

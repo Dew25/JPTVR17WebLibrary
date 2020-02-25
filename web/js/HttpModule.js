@@ -16,18 +16,18 @@
 
 class HttpModule{
   
-  status=function(response) {  
+  status(response) {  
     if (response.status >= 200 && response.status < 300) {  
       return Promise.resolve(response)  
     } else {  
       return Promise.reject(new Error(response.statusText))  
     }  
   }
-  json=function(response) {  
+  json(response) {  
     return response.json()  
   }
  //формирует options для fetch
-  fetchOpts = function(opt){
+  fetchOpts(opt){
     if(opt.method === 'POST'){
       return {
               method: opt.method,
@@ -59,7 +59,7 @@ class HttpModule{
               .catch((ex) => console.log("Fetch Exception", ex));
   };
 // преобразовывает пары ключ:значение в key=value как это отображается в параметрах 
-  queryParams=function(params) {
+  queryParams(params) {
       return Object.keys(params)
           .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
           .join('&');
