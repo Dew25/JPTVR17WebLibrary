@@ -12,7 +12,8 @@ class Book{
   }
   
   listBooks(){
-    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
+//    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
+    httpModule.http({url:'dist/entity.book',options:{method:'GET'}})
             .then(function(response) {  
               //printListNewBooks(response.dataJson);
                 console.log(response.dataJson);

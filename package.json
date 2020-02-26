@@ -2,9 +2,9 @@
   "name": "jptvr17weblibrary",
   "version": "1.0.0",
   "description": "JPTVR17WebLibrary",
-  "main": "web/js/header.js",
+  "main": "js/header.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --mode=development"
   },
   "repository": {
     "type": "git",

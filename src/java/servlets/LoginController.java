@@ -282,7 +282,7 @@ public class LoginController extends HttpServlet {
                 break;
         }
         if(!"".equals(json)){
-          
+         
           try (PrintWriter out = response.getWriter()) {
             out.println(json);        
           }
