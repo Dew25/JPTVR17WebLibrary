@@ -1,27 +1,16 @@
 import {httpModule} from './HttpModule.js';
 
 class Book{
-  card(data){ 
-      return `<div class="card border-primary m-3" style="max-width: 10rem;">
-          <div class="card-header">${data[i].name}</div>
-          <div class="card-body">
-            <h4 class="card-title">${data[i].author}</h4>
-            <p class="card-text">${data[i].publishedYear}</p>
-          </div>
-        </div>`;
-  }
-  
   listBooks(){
 //    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
-    httpModule.http({url:'dist/entity.book',options:{method:'GET'}})
-            .then(function(response) {  
-              //printListNewBooks(response.dataJson);
-                console.log(response.dataJson);
-              //let data = JSON.parse(dataJson);
+    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
+            .then(function(response) {
+              console.log(response.dataJson);
               let data = response.dataJson;
               let cards = '<div class="w-100 d-flex justify-content-center">';
               for(let i= 0; i< data.length;i++){
-                cards += `<div class="card border-primary m-3" style="max-width: 10rem;">
+                cards +=
+                        `<div class="card border-primary m-3" style="max-width: 10rem;">
                             <div class="card-header">${data[i].name}</div>
                             <div class="card-body">
                               <h4 class="card-title">${data[i].author}</h4>
@@ -34,7 +23,9 @@ class Book{
               console.log('Request succeeded with JSON response', response);  
             })
   }
-  createBook(){console.log("createBook=true");}
+  createBook(){
+    
+  }
   
   printNewBookForm(validFunc){
     let htmlAddBook = `<div class="row d-flex justify-content-center">

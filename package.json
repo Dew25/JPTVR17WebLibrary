@@ -2,9 +2,9 @@
   "name": "jptvr17weblibrary",
   "version": "1.0.0",
   "description": "JPTVR17WebLibrary",
-  "main": "js/header.js",
+  "main": "web/js/header.js",
   "scripts": {
-    "dev": "webpack --mode=development"
+    "dev": "webpack --mode=development --watch"
   },
   "repository": {
     "type": "git",

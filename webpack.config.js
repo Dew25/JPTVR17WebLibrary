@@ -5,16 +5,16 @@ module.exports = {
 	//context: path.resolve(__dirname, 'web'),
 	mode: 'development',
 	entry: {
-		main: path.resolve(__dirname,'web/index.html')
+		main: path.resolve(__dirname,'web/js/App.js')
 	},
 	output: {
-		filename: '[name].[contenthash].js',
-		path: path.resolve(__dirname,'dist')
+		filename: 'dist/[name].[contenthash].js',//файл будет создан в web/dist
+		path: path.resolve(__dirname,'web')// файл index.html подключенным js из web/dist
 	},
 	plugins:[
 		new HTMLWebpackPlugin({
-			template: path.resolve(__dirname,'web/index.html')
+			template: path.resolve(__dirname,'web/template/index.html')// шаблон, по которому будет строиться web/index.html
 		}),
-		//new CleanWebpackPlugin()
+		//new CleanWebpackPlugin(path.resolve(__dirname,'web/dist'))
 	]
 }

@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("entity.book")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class BookFacadeREST extends AbstractFacade<Book> {
 
   @PersistenceContext(unitName = "JPTVR17WebLibraryPU")
@@ -38,6 +39,7 @@ public class BookFacadeREST extends AbstractFacade<Book> {
   @POST
   @Override
   @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  
   public void create(Book entity) {
     super.create(entity);
   }
