@@ -6,8 +6,11 @@
 package rest;
 
 import entity.Book;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -19,6 +22,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import jsonbuilders.BookJsonBuilder;
 
 /**
  *
@@ -65,10 +70,11 @@ public class BookFacadeREST extends AbstractFacade<Book> {
   }
 
   @GET
-  @Override
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  
+  @Produces({MediaType.APPLICATION_JSON})
   public List<Book> findAll() {
-    return super.findAll();
+    List<Book> books = super.findAll();
+    return books;
   }
 
   @GET

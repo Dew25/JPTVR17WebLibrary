@@ -3,10 +3,11 @@ import {httpModule} from './HttpModule.js';
 class Book{
   listBooks(){
 //    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
-    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
+    httpModule.http({url:'rest/entity.book',options:{method:'GET'}})
             .then(function(response) {
               console.log(response.dataJson);
-              let data = response.dataJson;
+//              let data = response.dataJson;
+              let data = response;
               let cards = '<div class="w-100 d-flex justify-content-center">';
               for(let i= 0; i< data.length;i++){
                 cards +=
