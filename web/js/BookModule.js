@@ -3,11 +3,11 @@ import {httpModule} from './HttpModule.js';
 class Book{
   listBooks(){
 //    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
-    httpModule.http({url:'rest/entity.book',options:{method:'GET'}})
+    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
             .then(function(response) {
               console.log(response.dataJson);
-//              let data = response.dataJson;
-              let data = response;
+              let data = response.dataJson;
+            //  let data = response;
               let cards = '<div class="w-100 d-flex justify-content-center">';
               for(let i= 0; i< data.length;i++){
                 cards +=
@@ -25,7 +25,28 @@ class Book{
             })
   }
   createBook(){
-    
+      let name = document.getElementById('name').value;
+      let author = document.getElementById('author').value;
+      let isbn = document.getElementById('isbn').value;
+      let publishedYear = document.getElementById('publishedYear').value;
+      let countInLibrary = document.getElementById('countInLibrary').value;
+      let price = document.getElementById('price').value;
+      let book={
+          "name": name,
+          "author": author,
+          "isbn": isbn,
+          "publishedYear": publishedYear,
+          "countInLibrary": countInLibrary,
+          "price": price,
+      }
+      
+     httpModule.http({url:'createBookJson',options:{method:'POST',data:book}})
+            .then(function(response) {
+              console.log(response.dataJson);
+              
+              console.log('Request succeeded with JSON response', response);  
+            })
+    window.listBooks();
   }
   
   printNewBookForm(validFunc){

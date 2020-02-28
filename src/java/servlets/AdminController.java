@@ -11,10 +11,14 @@ import entity.Reader;
 import entity.Roles;
 import entity.User;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +30,7 @@ import session.HistoryFacade;
 import session.ReaderFacade;
 import session.RolesFacade;
 import session.UserFacade;
+import util.JsonResponse;
 import util.RoleManager;
 
 /**
@@ -35,7 +40,7 @@ import util.RoleManager;
 @WebServlet(name = "AdminController", urlPatterns = {
     "/newBook",
     "/addBook",
-    
+    "/createBookJson",
     "/editBook",
     "/changeBook",
     "/listReaders",
@@ -65,6 +70,8 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        String json = "";
+        JsonResponse jsonResponse = new JsonResponse();
         String path = request.getServletPath();
         HttpSession session = request.getSession(false);
         if (null == session){
@@ -92,14 +99,14 @@ public class AdminController extends HttpServlet {
             case "/addBook":
                 String name = request.getParameter("name");
                 String author = request.getParameter("author");
-                String publichedYear = request.getParameter("publishedYear");
+                String publishedYear = request.getParameter("publishedYear");
                 String isbn = request.getParameter("isbn");
                 String countInLibrary = request.getParameter("countInLibrary");
                 String price = request.getParameter("price");
                 Book book = null;
                 try {
                     if(!"".equals(name) && !"".equals(author)){
-                        book = new Book( name, author, isbn, new Integer(publichedYear),Integer.parseInt(countInLibrary),Integer.parseInt(price),true);
+                        book = new Book( name, author, isbn, new Integer(publishedYear),Integer.parseInt(countInLibrary),Integer.parseInt(price),true);
                         bookFacade.create(book);
                         request.setAttribute("info", "Книга \"" + book.getName()+"\" добавлена");
                     }else{
@@ -109,6 +116,27 @@ public class AdminController extends HttpServlet {
                    request.setAttribute("info", "Книгу добавить не удалось (не корректные данные)"); 
                 }
                 request.getRequestDispatcher("/newBook.jsp").forward(request, response);
+                break;
+            case "/createBookJson":
+                JsonReader jsonReader = Json.createReader(request.getReader());
+                JsonObject jsonObject = jsonReader.readObject();
+                name = jsonObject.getString("name");
+                author = jsonObject.getString("author");
+                isbn = jsonObject.getString("isbn");
+                publishedYear = jsonObject.getString("publishedYear");
+                countInLibrary = jsonObject.getString("countInLibrary");
+                price = jsonObject.getString("price");
+                book = new Book(
+                        name, 
+                        author, 
+                        isbn, 
+                        Integer.parseInt(publishedYear), 
+                        Integer.parseInt(countInLibrary), 
+                        Integer.parseInt(price), 
+                        true
+                );
+                bookFacade.create(book);
+                json = jsonResponse.getJsonResponse(session);
                 break;
             case "/editBook":
                 String bookId = request.getParameter("id");
@@ -120,14 +148,14 @@ public class AdminController extends HttpServlet {
                 String id = request.getParameter("id");
                 name = request.getParameter("name");
                 author = request.getParameter("author");
-                publichedYear = request.getParameter("publishedYear");
+                publishedYear = request.getParameter("publishedYear");
                 isbn = request.getParameter("isbn");
                 countInLibrary = request.getParameter("countInLibrary");
                 String active = request.getParameter("active");
                 book = bookFacade.find(Long.parseLong(id));
                 book.setName(name);
                 book.setAuthor(author);
-                book.setPublishedYear(Integer.parseInt(publichedYear));
+                book.setPublishedYear(Integer.parseInt(publishedYear));
                 book.setIsbn(isbn);
                 book.setCountInLibrary(Integer.parseInt(countInLibrary));
                 if("on".equals(active)){
@@ -193,7 +221,14 @@ public class AdminController extends HttpServlet {
                         .forward(request, response);
                 break;
             
-        }        
+        }    
+        if(!"".equals(json)){
+         
+          try (PrintWriter out = response.getWriter()) {
+            out.println(json);  
+            out.flush();
+          }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
