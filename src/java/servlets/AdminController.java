@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jsonbuilders.BookJsonBuilder;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
@@ -135,8 +136,13 @@ public class AdminController extends HttpServlet {
                         Integer.parseInt(price), 
                         true
                 );
-                bookFacade.create(book);
-                json = jsonResponse.getJsonResponse(session);
+                try {
+                    bookFacade.create(book);
+                    BookJsonBuilder bjb = new BookJsonBuilder();
+                    json = jsonResponse.getJsonResponse(session,bjb.createJsonBook(book));
+                } catch (IOException e) {
+                    json = jsonResponse.getJsonResponse(session);
+                }
                 break;
             case "/editBook":
                 String bookId = request.getParameter("id");

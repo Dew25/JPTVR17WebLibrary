@@ -42,11 +42,16 @@ class Book{
       
      httpModule.http({url:'createBookJson',options:{method:'POST',data:book}})
             .then(function(response) {
-              console.log(response.dataJson);
-              
+              console.log(response);
+              if(response.dataJson !== null){
+                document.getElementById('info').innerHTML = 'Книга добавлена';
+              }else{
+                document.getElementById('info').innerHTML = 'Книгу добавить не удалось'; 
+              }    
+              bookModule.listBooks();//this === undefined в модуле
               console.log('Request succeeded with JSON response', response);  
-            })
-    window.listBooks();
+            });
+
   }
   
   printNewBookForm(validFunc){
