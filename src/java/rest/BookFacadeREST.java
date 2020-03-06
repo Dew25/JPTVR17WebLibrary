@@ -6,13 +6,20 @@
 package rest;
 
 import entity.Book;
-import java.math.BigDecimal;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.json.Json;
-import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -34,14 +41,16 @@ public class BookFacadeREST extends AbstractFacade<Book> {
 
   @PersistenceContext(unitName = "JPTVR17WebLibraryPU")
   private EntityManager em;
-
+  
+  private Context context;
+  
   public BookFacadeREST() {
     super(Book.class);
   }
 
   @POST
   @Override
-  @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  @Consumes({MediaType.APPLICATION_JSON})
   
   public void create(Book entity) {
     super.create(entity);
@@ -71,7 +80,8 @@ public class BookFacadeREST extends AbstractFacade<Book> {
   
   @Produces({MediaType.APPLICATION_JSON})
   public List<Book> findAll() {
-    List<Book> books = super.findAll();
+    List<Book> books = null;
+    books = super.findAll();
     return books;
   }
 

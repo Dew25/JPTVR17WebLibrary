@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
    * If required, comment out calling this method in getClasses().
    */
   private void addRestResourceClasses(Set<Class<?>> resources) {
+    resources.add(filter.CrossOriginResourceSharingFilter.class);
     resources.add(rest.BookFacadeREST.class);
     resources.add(rest.HistoryFacadeREST.class);
     resources.add(rest.ReaderFacadeREST.class);

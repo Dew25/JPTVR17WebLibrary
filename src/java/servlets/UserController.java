@@ -40,9 +40,9 @@ import util.RoleManager;
     
 })
 public class UserController extends HttpServlet {
-@EJB BookFacade bookFacade;
-@EJB ReaderFacade readerFacade;
-@EJB HistoryFacade historyFacade;
+@EJB private BookFacade bookFacade;
+@EJB private ReaderFacade readerFacade;
+@EJB private HistoryFacade historyFacade;
 @EJB private UserFacade userFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

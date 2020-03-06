@@ -13,7 +13,7 @@ module.exports = {
 	},
 	plugins:[
 		new HTMLWebpackPlugin({
-			filename: path.resolve(__dirname,'../index.html'),//путь к файлу web/index.html
+			filename: path.resolve(__dirname,'web/index.html'),//путь к файлу web/index.html
 			template: path.resolve(__dirname,'web/template/index.html')// шаблон, по которому будет строиться web/index.html
 		}),
 		new CleanWebpackPlugin()

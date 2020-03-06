@@ -4,7 +4,7 @@
   "description": "JPTVR17WebLibrary",
   "main": "web/js/header.js",
   "scripts": {
-    "dev": "webpack --mode=development --watch"
+    "dev": "webpack --mode=development"
   },
   "repository": {
     "type": "git",

@@ -139,9 +139,9 @@ public class AdminController extends HttpServlet {
                 try {
                     bookFacade.create(book);
                     BookJsonBuilder bjb = new BookJsonBuilder();
-                    json = jsonResponse.getJsonResponse(session,bjb.createJsonBook(book));
+                    json = jsonResponse.getJsonResponse(session,"true");
                 } catch (IOException e) {
-                    json = jsonResponse.getJsonResponse(session);
+                    json = jsonResponse.getJsonResponse(session,"false");
                 }
                 break;
             case "/editBook":
@@ -229,7 +229,6 @@ public class AdminController extends HttpServlet {
             
         }    
         if(!"".equals(json)){
-         
           try (PrintWriter out = response.getWriter()) {
             out.println(json);  
             out.flush();

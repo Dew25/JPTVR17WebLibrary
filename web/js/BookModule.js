@@ -1,17 +1,18 @@
 import {httpModule} from './HttpModule.js';
+import {authModule} from './AuthModule.js';
 
 class Book{
   listBooks(){
 //    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
-    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
+    httpModule.http({url:'rest/entity.book',options:{method:'GET'}})
             .then(function(response) {
-              console.log(response.dataJson);
-              let data = response.dataJson;
+              console.log(response);
+              let data = response;
             //  let data = response;
-              let cards = '<div class="w-100 d-flex justify-content-center">';
+              let cards = '<div class="row w-100 d-flex justify-content-center">';
               for(let i= 0; i< data.length;i++){
                 cards +=
-                        `<div class="card border-primary m-3" style="max-width: 10rem;">
+                        `<div class="card border-primary m-3" style="width: 10em;">
                             <div class="card-header">${data[i].name}</div>
                             <div class="card-body">
                               <h4 class="card-title">${data[i].author}</h4>
@@ -40,15 +41,20 @@ class Book{
           "price": price,
       }
       
-     httpModule.http({url:'createBookJson',options:{method:'POST',data:book}})
+     httpModule.http({url:'rest/entity.book',options:{method:'POST',data:book}})
             .then(function(response) {
               console.log(response);
-              if(response.dataJson !== null){
+              if(response === undefined){
                 document.getElementById('info').innerHTML = 'Книга добавлена';
+                bookModule.listBooks();//this === undefined в модуле
               }else{
                 document.getElementById('info').innerHTML = 'Книгу добавить не удалось'; 
+                if(response.authStatus === 'false'){
+                  authModule.printLoginForm();
+                }else{
+                  bookModule.listBooks();
+                }
               }    
-              bookModule.listBooks();//this === undefined в модуле
               console.log('Request succeeded with JSON response', response);  
             });
 
