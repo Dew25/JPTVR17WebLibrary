@@ -1,5 +1,6 @@
 import {httpModule} from './HttpModule.js';
 import {bookModule } from './BookModule.js';
+import {readerModule} from './ReaderModule.js';
 
 //export {printLoginForm,systemOutput};
 
@@ -14,8 +15,10 @@ class AuthModule{
                     <p class="card-text d-flex justify-content-between">Пароль: <input class="ml-2" type="text" id="password"></p>
                     <p class="card-text"><button class="btn btn-light w-100" type="button" id="btnEnter">Войти</button</p>
                   </div>
+    <p class="text-center">Нет учетной записи? <a id="registration" href="#">Зарегистрироваться</a></p>
                 </div>
              </div>`;//cards;
+    document.getElementById('registration').addEventListener('click',readerModule.printNewReaderForm);
     document.getElementById('btnEnter').onclick = function(){
       
       let login = document.getElementById('login').value;
@@ -47,7 +50,8 @@ class AuthModule{
               bookModule.listBooks();
               console.log('Request succeeded with JSON response', response);  
             })
-    }  
+    } 
+    
   }
 
   systemOutput(){

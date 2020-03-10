@@ -55,6 +55,7 @@ import util.RoleManager;
     "/listBooks",
     "/listNewBooks",
     "/listReadersJson",
+    "/createReaderJson",
     
     
     
@@ -123,6 +124,7 @@ public class LoginController extends HttpServlet {
         String json = "";
         JsonObjectBuilder job = Json.createObjectBuilder();
         JsonResponse jsonResponse = new JsonResponse();
+        JsonReader jsonReader = Json.createReader(request.getReader());
         EncriptPass ep = new EncriptPass();
         RoleManager rm = new RoleManager();
         String path = request.getServletPath();
@@ -159,7 +161,6 @@ public class LoginController extends HttpServlet {
                         .forward(request, response);
                 break;
             case "/loginJson":
-                JsonReader jsonReader = Json.createReader(request.getReader());
                 JsonObject jsonObject = jsonReader.readObject();
                 login = jsonObject.getString("login","");
                 password = jsonObject.getString("password","");
@@ -277,6 +278,43 @@ public class LoginController extends HttpServlet {
                   jab.add(readerJsonBuilder.createJsonReader(r));
                 }
                 json = jsonResponse.getJsonResponse(session,jab.build());
+                break;
+            case "/createReaderJson":
+                JsonObject createUserJsonObject = jsonReader.readObject();
+                login = createUserJsonObject.getString("login");
+                password1 = createUserJsonObject.getString("password1");
+                password2 = createUserJsonObject.getString("password2");
+                name = createUserJsonObject.getString("name");
+                surname = createUserJsonObject.getString("surname");
+                money = createUserJsonObject.getString("money");
+                phone = createUserJsonObject.getString("phone");
+                if(!(password1 != null && password1.equals(password2))){
+                    json = jsonResponse.getJsonResponse(session,"false");
+                    break;
+                }
+                reader = null;
+                user = null;
+                try {
+                    reader = new Reader(null, name, surname, phone, Integer.parseInt(money));
+                    readerFacade.create(reader);
+                    user = new User();
+                    user.setLogin(login);
+                    String salts = ep.createSalts();
+                    password = ep.setEncriptPass(password1, salts);
+                    user.setPassword(password);
+                    user.setSalts(salts);
+                    user.setReader(reader);
+                    userFacade.create(user);
+                    json = jsonResponse.getJsonResponse(session,"true");
+                } catch (Exception e) {
+                    if(reader != null && reader.getId() != null){
+                        readerFacade.remove(reader);
+                    }
+                    if(user != null && user.getId() != null){
+                        userFacade.remove(user);
+                    }
+                    json = jsonResponse.getJsonResponse(session,"false");
+                }
                 break;
         }
         if(!"".equals(json)){
