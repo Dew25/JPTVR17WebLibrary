@@ -10,20 +10,27 @@ import entity.History;
 import entity.Reader;
 import entity.User;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jsonbuilders.BookJsonBuilder;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
 import session.UserFacade;
 import util.EncriptPass;
+import util.JsonResponse;
 import util.RoleManager;
 
 /**
@@ -37,6 +44,8 @@ import util.RoleManager;
     "/doTakeBook",
     "/editReader",
     "/changeReader",
+    "/getBookJson",
+    
     
 })
 public class UserController extends HttpServlet {
@@ -57,6 +66,10 @@ public class UserController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+         String json = "";
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        JsonResponse jsonResponse = new JsonResponse();
+        JsonReader jsonReader = Json.createReader(request.getReader());
         String path = request.getServletPath();
         HttpSession session = request.getSession(false);
         if (null == session){
@@ -87,6 +100,13 @@ public class UserController extends HttpServlet {
                 Book book = bookFacade.find(Long.parseLong(bookId));
                 request.setAttribute("book", book);
                 request.getRequestDispatcher("/showBook.jsp").forward(request, response);
+                break;
+            case "/getBookJson":
+                JsonObject jsonObject = jsonReader.readObject();
+                bookId = jsonObject.getString("bookId");
+                book = bookFacade.find(Long.parseLong(bookId));
+                BookJsonBuilder bjb = new BookJsonBuilder();
+                json = jsonResponse.getJsonResponse(session, bjb.createJsonBook(book));
                 break;
             case "/takeBook":
                 List<Book> listBooks = bookFacade.findTakeBook();
@@ -217,6 +237,12 @@ public class UserController extends HttpServlet {
                         .forward(request, response);
                 }
                 break;    
+        }
+        if(!"".equals(json)){
+          try (PrintWriter out = response.getWriter()) {
+            out.println(json);  
+            out.flush();
+          }
         }
     }
 

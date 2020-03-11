@@ -2,29 +2,56 @@ import {httpModule} from './HttpModule.js';
 import {authModule} from './AuthModule.js';
 
 class Book{
+  buyBook(bookId){
+    let url = 'getBookJson';
+    let param = 'bookId='+bookId;
+     httpModule.http({url:url,options:{method:'GET',params: param}})
+     .then(function(response) {
+              console.log(response);
+              let data = response;
+              let content = document.getElementById('content');
+              content.insertAdjacentHTML('afterbegin',
+                        `<div class="row w-100 d-flex justify-content-center" id="listBooksDiv"></div>
+                          <div class="card border-primary m-3" style="width: 10em;">
+                            <div class="card-header">${data.name}</div>
+                            <div class="card-body">
+                              <h4 class="card-title">${data.author}</h4>
+                              <p class="card-text">${data.publishedYear}</p>
+                            </div>
+                          </div>
+                        </div>`);
+            });
+  }
   listBooks(){
-//    httpModule.http({url:'listNewBooks',options:{method:'GET'}})
     httpModule.http({url:'rest/entity.book',options:{method:'GET'}})
             .then(function(response) {
               console.log(response);
               let data = response;
             //  let data = response;
-              let cards = '<div class="row w-100 d-flex justify-content-center">';
+              let content = document.getElementById('content');
+              content.insertAdjacentHTML('afterbegin','<div class="row w-100 d-flex justify-content-center" id="listBooksDiv"></div>');
+              let div = document.getElementById('listBooksDiv');
               for(let i= 0; i< data.length;i++){
-                cards +=
+                div.insertAdjacentHTML('beforeend',
                         `<div class="card border-primary m-3" style="width: 10em;">
                             <div class="card-header">${data[i].name}</div>
                             <div class="card-body">
                               <h4 class="card-title">${data[i].author}</h4>
                               <p class="card-text">${data[i].publishedYear}</p>
                             </div>
-                          </div>`;//card(data);
+                            <button type="button" id="btnBuyBook${i}" >Купить книгу</button>
+                          </div>`);//card(data);
+                let btnBuyBook = document.getElementById("btnBuyBook"+i);
+                btnBuyBook.onclick = function(){
+                  bookModule.buyBook(data[i].id);
+                };
               };
-              cards += '</div>';
-              document.getElementById('content').innerHTML = cards;
+              //document.getElementById('content').innerHTML += '</div>';
+              //document.getElementById('content').innerHTML = cards;
               console.log('Request succeeded with JSON response', response);  
-            })
+            });
   }
+  
   createBook(){
       let name = document.getElementById('name').value;
       let author = document.getElementById('author').value;
@@ -66,14 +93,14 @@ class Book{
                           <h4 class="mb-3">Добавить книгу</h4>
                           <form class="needs-validation" novalidate>
                             
-                            <div class="mb-3">
+                            <div class="mb-3 w-50">
                               <label for="name">Название</label>
                               <input type="text" class="form-control" id="name" placeholder="" value="" required>
                               <div class="invalid-feedback">
                                 Название должно быть заполнено.
                               </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3 w-50">
                               <label for="author">Автор книги</label>
                               <input type="text" class="form-control" id="author" placeholder="" value="" required>
                               <div class="invalid-feedback">
@@ -81,7 +108,7 @@ class Book{
                               </div>
                             </div>
                             
-                            <div class="mb-3">
+                            <div class="mb-3 w-50">
                               <label for="isbn">ISBN</label>
                                 <input type="text" class="form-control" id="isbn" placeholder="isbn" required>
                                 <div class="invalid-feedback" style="width: 100%;">

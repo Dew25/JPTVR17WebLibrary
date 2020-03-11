@@ -38,26 +38,24 @@ function toogleMenuActive(elementId){
     }
   }
 }
+authMenu();
 
-
-function validationFunc(){
-//  window.addEventListener('click', function () {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation')
-
-    // Loop over them and prevent submission
-    Array.prototype.filter.call(forms, function (form) {
-      form.addEventListener('submit', function (event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-        form.classList.add('was-validated')
-      }, false)
-    });
-//  }, false);
+function authMenu(){
+  let user = null;
+  if(localStorage.getItem('user') !== null){
+    user = JSON.parse(localStorage.getItem('user'));
+  }
+  if(user !== null){
+    document.getElementById("newBook").style.display = 'block';
+    document.getElementById("listReaders").style.display = 'block';
+    document.getElementById("sysout").style.display = 'block';
+    document.getElementById("showLogin").style.display = 'none';
+  }else{
+    document.getElementById("newBook").style.display = 'none';
+    document.getElementById("listReaders").style.display = 'none';
+    document.getElementById("sysout").style.display = 'none';
+    document.getElementById("showLogin").style.display = 'block';
+  }
 }
-
-//console.log("hello1");
 
 

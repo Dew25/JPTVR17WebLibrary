@@ -71,9 +71,10 @@ public class BookFacadeREST extends AbstractFacade<Book> {
 
   @GET
   @Path("{id}")
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  @Produces({MediaType.APPLICATION_JSON})
   public Book find(@PathParam("id") Long id) {
-    return super.find(id);
+      Book book = super.find(id);
+    return book;
   }
 
   @GET

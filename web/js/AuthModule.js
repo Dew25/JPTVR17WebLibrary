@@ -32,7 +32,7 @@ class AuthModule{
           }).then(function(response) { 
               if(response.authStatus === 'true'){
                 localStorage.setItem('token',response.token);
-                localStorage.setItem('user',response.user);
+                localStorage.setItem('user',JSON.stringify(response.user));
                 document.getElementById('info').innerHTML = 'Вы вошли как '+response.user.login;
                 document.getElementById('showLogin').style.display = 'none';
                 document.getElementById('sysout').style.display = 'block';
@@ -69,6 +69,7 @@ class AuthModule{
                 document.getElementById('showLogin').style.display = 'block';
                 document.getElementById('sysout').style.display = 'none';
                 document.getElementById('listReaders').style.display = 'none';
+                document.getElementById('newBook').style.display = 'none';
                 document.getElementById('info').innerHTML = 'Вы вышли';
                 bookModule.listBooks();
               }
